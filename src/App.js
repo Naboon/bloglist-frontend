@@ -76,9 +76,9 @@ const App = () => {
     }, 5000)
   }
 
-  const addLike = async (id) => {
-    const blog = blogs.find(n => n.id === id)
-    const changedBlog = { ...blog, likes: blog.likes + 1 }
+  const handleAddLike = async (id) => {
+    const blogObject = blogs.find(n => n.id === id)
+    const changedBlog = { ...blogObject, likes: blogObject.likes + 1 }
 
     try {
       await blogService.update(id, changedBlog)
@@ -95,7 +95,7 @@ const App = () => {
     }
   }
 
-  const addBlog = async (blogObject) => {
+  const handleAddBlog = async (blogObject) => {
 
     const newBlog = {
       title: blogObject.title,
@@ -129,6 +129,22 @@ const App = () => {
 
   }
 
+  const handleRemoveBlog = async (blog) => {
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+      try {
+        await blogService.remove(blog.id)
+        setBlogs(blogs.filter(n => n.id !== blog.id))
+      } catch (exception) {
+        setMessage('could not remove the blog, only the user who added the blog can remove it')
+        setMessageType('error')
+        setTimeout(() => {
+          setMessage(null)
+          setMessageType(null)
+        }, 5000)
+      }
+    }
+  }
+
   const blogFormRef = useRef()
 
   if (user === null) {
@@ -160,13 +176,15 @@ const App = () => {
 
       <h2>create new</h2>
       <Togglable buttonLabel="create new blog" ref={blogFormRef}>
-        <BlogForm createBlog={addBlog} />
+        <BlogForm handleAddBlog={handleAddBlog} />
       </Togglable>
       {blogs.map(blog =>
         <Blog
           key={blog.id}
           blog={blog}
-          addLike={() => addLike(blog.id)}
+          user={user}
+          handleAddLike={() => handleAddLike(blog.id)}
+          handleRemoveBlog={() => handleRemoveBlog(blog)}
         />
       )}
     </div>
