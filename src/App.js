@@ -20,7 +20,7 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs(blogs)
+      setBlogs(blogs.sort((a, b) => b.likes - a.likes))
     )
   }, [])
 
@@ -82,7 +82,9 @@ const App = () => {
 
     try {
       await blogService.update(id, changedBlog)
-      setBlogs(blogs.map(blog => blog.id !== id ? blog : changedBlog))
+      setBlogs(blogs.map(blog =>
+        blog.id !== id ? blog : changedBlog)
+        .sort((a, b) => b.likes - a.likes))
     } catch (exception) {
       setMessage('adding a like failed')
       setMessageType('error')
@@ -109,7 +111,7 @@ const App = () => {
 
     try {
       await blogService.create(newBlog)
-      setBlogs(blogs.concat(newBlog))
+      setBlogs(blogs.concat(newBlog).sort((a, b) => b.likes - a.likes))
       setMessage(`a new blog ${newBlog.title} by ${newBlog.author} added`)
       setMessageType('notification')
       setTimeout(() => {
