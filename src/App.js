@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 import Blog from './components/Blog'
 import Notification from './components/Notification'
@@ -76,18 +76,41 @@ const App = () => {
     }, 5000)
   }
 
+  const addLike = async (id) => {
+    const blog = blogs.find(n => n.id === id)
+    const changedBlog = { ...blog, likes: blog.likes + 1 }
+
+    try {
+      await blogService.update(id, changedBlog)
+      setBlogs(blogs.map(blog => blog.id !== id ? blog : changedBlog))
+    } catch (exception) {
+      setMessage('adding a like failed')
+      setMessageType('error')
+      setTimeout(() => {
+        setMessage(null)
+        setMessageType(null)
+      }, 5000)
+    }
+  }
+
   const addBlog = async (blogObject) => {
 
     const newBlog = {
       title: blogObject.title,
       author: blogObject.author,
-      url: blogObject.url
+      url: blogObject.url,
+      likes: 0,
+      user: {
+        username: user.username,
+        name: user.name,
+        id: user.id
+      }
     }
 
     try {
       await blogService.create(newBlog)
       setBlogs(blogs.concat(newBlog))
-      setMessage(`an new blog ${newBlog.title} by ${newBlog.author} added`)
+      setMessage(`a new blog ${newBlog.title} by ${newBlog.author} added`)
       setMessageType('notification')
       setTimeout(() => {
         setMessage(null)
@@ -137,9 +160,12 @@ const App = () => {
       <Togglable buttonLabel="create new blog" ref={blogFormRef}>
         <BlogForm createBlog={addBlog} />
       </Togglable>
-
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog
+          key={blog.id}
+          blog={blog}
+          addLike={() => addLike(blog.id)}
+        />
       )}
     </div>
   )

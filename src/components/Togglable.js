@@ -1,4 +1,4 @@
-import React, { useState, useImperativeHandle, forwardRef } from 'react'
+import { useState, useImperativeHandle, forwardRef } from 'react'
 
 const Togglable = forwardRef((props, ref) => {
   const [visible, setVisible] = useState(false)

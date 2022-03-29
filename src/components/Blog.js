@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
+// import blogService from '../services/blogs'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, addLike }) => {
   const [showInfo, setShowInfo] = useState(false)
 
   const blogStyle = {
@@ -27,8 +28,8 @@ const Blog = ({ blog }) => {
         </div>
         <div>{blog.url}</div>
         <div>
-          {blog.likes}
-          <button>like</button>
+          likes {blog.likes}
+          <button onClick={addLike}>like</button>
         </div>
         <div>{blog.user.name}</div>
       </div>
