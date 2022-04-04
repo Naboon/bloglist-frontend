@@ -9,19 +9,16 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import BlogForm from './components/BlogForm'
 
-
 const App = () => {
-  const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [message, setMessage] = useState(null)
-  const [messageType, setMessageType] = useState(null)
-  const [user, setUser] = useState(null)
+  const [ blogs, setBlogs ] = useState([])
+  const [ username, setUsername ] = useState('')
+  const [ password, setPassword ] = useState('')
+  const [ message, setMessage ] = useState(null)
+  const [ messageType, setMessageType ] = useState(null)
+  const [ user, setUser ] = useState(null)
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs(blogs.sort((a, b) => b.likes - a.likes))
-    )
+    blogService.getAll().then((blogs) => setBlogs(blogs.sort((a, b) => b.likes - a.likes)))
   }, [])
 
   useEffect(() => {
@@ -38,12 +35,11 @@ const App = () => {
 
     try {
       const user = await loginService.login({
-        username, password,
+        username,
+        password
       })
 
-      window.localStorage.setItem(
-        'loggedBlogappUser', JSON.stringify(user)
-      )
+      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
       blogService.setToken(user.token)
       setUser(user)
       setUsername('')
@@ -77,14 +73,12 @@ const App = () => {
   }
 
   const handleAddLike = async (id) => {
-    const blogObject = blogs.find(n => n.id === id)
+    const blogObject = blogs.find((n) => n.id === id)
     const changedBlog = { ...blogObject, likes: blogObject.likes + 1 }
 
     try {
       await blogService.update(id, changedBlog)
-      setBlogs(blogs.map(blog =>
-        blog.id !== id ? blog : changedBlog)
-        .sort((a, b) => b.likes - a.likes))
+      setBlogs(blogs.map((blog) => (blog.id !== id ? blog : changedBlog)).sort((a, b) => b.likes - a.likes))
     } catch (exception) {
       setMessage('adding a like failed')
       setMessageType('error')
@@ -96,7 +90,6 @@ const App = () => {
   }
 
   const handleAddBlog = async (blogObject) => {
-
     const newBlog = {
       title: blogObject.title,
       author: blogObject.author,
@@ -126,14 +119,13 @@ const App = () => {
         setMessageType(null)
       }, 5000)
     }
-
   }
 
   const handleRemoveBlog = async (blog) => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
       try {
         await blogService.remove(blog.id)
-        setBlogs(blogs.filter(n => n.id !== blog.id))
+        setBlogs(blogs.filter((n) => n.id !== blog.id))
       } catch (exception) {
         setMessage('could not remove the blog, only the user who added the blog can remove it')
         setMessageType('error')
@@ -178,7 +170,7 @@ const App = () => {
       <Togglable buttonLabel="create new blog" ref={blogFormRef}>
         <BlogForm handleAddBlog={handleAddBlog} />
       </Togglable>
-      {blogs.map(blog =>
+      {blogs.map((blog) => (
         <Blog
           key={blog.id}
           blog={blog}
@@ -186,7 +178,7 @@ const App = () => {
           handleAddLike={() => handleAddLike(blog.id)}
           handleRemoveBlog={() => handleRemoveBlog(blog)}
         />
-      )}
+      ))}
     </div>
   )
 }
