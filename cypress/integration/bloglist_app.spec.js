@@ -49,5 +49,17 @@ describe('Blog app', function() {
       cy.get('#create-button').click()
       cy.contains('Test Engineering')
     })
+
+    it.only('A blog can be liked', function() {
+      cy.contains('create new blog').click()
+      cy.get('#title-input').type('Test Engineering')
+      cy.get('#author-input').type('Gerhard Berger')
+      cy.get('#url-input').type('http://greatblogs.com/gberger/testing')
+      cy.get('#create-button').click()
+
+      cy.contains('view').click()
+      cy.contains('like').click()
+      cy.contains('likes 1')
+    })
   })
 })

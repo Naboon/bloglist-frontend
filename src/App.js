@@ -104,7 +104,8 @@ const App = () => {
 
     try {
       await blogService.create(newBlog)
-      setBlogs(blogs.concat(newBlog).sort((a, b) => b.likes - a.likes))
+      const updatedBlogs = await blogService.getAll()
+      setBlogs(updatedBlogs.sort((a, b) => b.likes - a.likes))
       setMessage(`a new blog ${newBlog.title} by ${newBlog.author} added`)
       setMessageType('notification')
       setTimeout(() => {
