@@ -16,12 +16,12 @@ const Blog = ({ blog, user, handleAddLike, handleRemoveBlog }) => {
   const showContent = { display: showInfo ? '' : 'none' }
 
   return (
-    <div style={blogStyle}>
-      <div style={hideContent}>
+    <div className='blog' style={blogStyle}>
+      <div className='lessInfo' style={hideContent}>
         {blog.title} {blog.author}
         <button onClick={() => setShowInfo(true)}>view</button>
       </div>
-      <div style={showContent}>
+      <div className='moreInfo' style={showContent}>
         <div>
           {blog.title} {blog.author}
           <button onClick={() => setShowInfo(false)}>hide</button>
