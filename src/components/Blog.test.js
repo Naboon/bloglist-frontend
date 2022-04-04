@@ -45,3 +45,19 @@ test('renders all info after "show" button has been pressed', () => {
   expect(lessInfo).not.toBeVisible()
   expect(moreInfo).toBeVisible()
 })
+
+test('event handler is called twice when "like" button is pressed twice', () => {
+  const mockHandler = jest.fn()
+
+  render(<Blog blog={blog} user={user} handleAddLike={mockHandler}
+    handleRemoveBlog={() => App.handleRemoveBlog} />)
+
+  const viewButton = screen.getByText('view')
+  userEvent.click(viewButton)
+
+  const likeButton = screen.getByText('like')
+  userEvent.click(likeButton)
+  userEvent.click(likeButton)
+
+  expect(mockHandler.mock.calls).toHaveLength(2)
+})
