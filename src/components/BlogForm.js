@@ -1,9 +1,9 @@
 import { useState } from 'react'
 
 const BlogForm = ({ handleAddBlog }) => {
-  const [newTitle, setNewTitle] = useState('')
-  const [newAuthor, setNewAuthor] = useState('')
-  const [newUrl, setNewUrl] = useState('')
+  const [ newTitle, setNewTitle ] = useState('')
+  const [ newAuthor, setNewAuthor ] = useState('')
+  const [ newUrl, setNewUrl ] = useState('')
 
   const handleTitleChange = (event) => {
     setNewTitle(event.target.value)
@@ -31,34 +31,24 @@ const BlogForm = ({ handleAddBlog }) => {
   }
 
   return (
-    <div className='formDiv'>
+    <div className="formDiv">
       <form onSubmit={createBlog}>
         <div>
           title:
-          <input
-            value={newTitle}
-            onChange={handleTitleChange}
-            id='title-input'
-          />
+          <input value={newTitle} onChange={handleTitleChange} id="title-input" />
         </div>
         <div>
           author:
-          <input
-            value={newAuthor}
-            onChange={handleAuthorChange}
-            id='author-input'
-          />
+          <input value={newAuthor} onChange={handleAuthorChange} id="author-input" />
         </div>
         <div>
           url:
-          <input
-            value={newUrl}
-            onChange={handleUrlChange}
-            id='url-input'
-          />
+          <input value={newUrl} onChange={handleUrlChange} id="url-input" />
         </div>
         <div>
-          <button type="submit">create</button>
+          <button id="create-button" type="submit">
+            create
+          </button>
         </div>
       </form>
     </div>

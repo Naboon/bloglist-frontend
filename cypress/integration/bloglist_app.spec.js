@@ -33,4 +33,21 @@ describe('Blog app', function() {
       cy.get('.error').should('contain', 'wrong username or password')
     })
   })
+
+  describe('When logged in', function() {
+    beforeEach(function() {
+      cy.get('#username').type('toivane4')
+      cy.get('#password').type('salainen')
+      cy.get('#login-button').click()
+    })
+
+    it('A blog can be created', function() {
+      cy.contains('create new blog').click()
+      cy.get('#title-input').type('Test Engineering')
+      cy.get('#author-input').type('Gerhard Berger')
+      cy.get('#url-input').type('http://greatblogs.com/gberger/testing')
+      cy.get('#create-button').click()
+      cy.contains('Test Engineering')
+    })
+  })
 })
