@@ -2,7 +2,7 @@ import { useState } from 'react'
 import PropTypes from 'prop-types'
 
 const Blog = ({ blog, user, handleAddLike, handleRemoveBlog }) => {
-  const [showInfo, setShowInfo] = useState(false)
+  const [ showInfo, setShowInfo ] = useState(false)
 
   const blogStyle = {
     paddingTop: 10,
@@ -16,12 +16,12 @@ const Blog = ({ blog, user, handleAddLike, handleRemoveBlog }) => {
   const showContent = { display: showInfo ? '' : 'none' }
 
   return (
-    <div className='blog' style={blogStyle}>
-      <div className='lessInfo' style={hideContent}>
+    <div className="blog" style={blogStyle}>
+      <div className="lessInfo" style={hideContent}>
         {blog.title} {blog.author}
         <button onClick={() => setShowInfo(true)}>view</button>
       </div>
-      <div className='moreInfo' style={showContent}>
+      <div className="moreInfo" style={showContent}>
         <div>
           {blog.title} {blog.author}
           <button onClick={() => setShowInfo(false)}>hide</button>
@@ -32,9 +32,11 @@ const Blog = ({ blog, user, handleAddLike, handleRemoveBlog }) => {
           <button onClick={handleAddLike}>like</button>
         </div>
         <div>{blog.user.name}</div>
-        {user.username === blog.user.username &&
-          <button onClick={handleRemoveBlog}>remove</button>
-        }
+        {user.username === blog.user.username && (
+          <button id="remove-button" onClick={handleRemoveBlog}>
+            remove
+          </button>
+        )}
       </div>
     </div>
   )
