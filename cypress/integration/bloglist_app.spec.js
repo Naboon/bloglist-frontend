@@ -43,7 +43,7 @@ describe('Blog app', function() {
       cy.login({ username: 'toivane4', password: 'salainen' })
     })
 
-    it('A blog can be created', function() {
+    it('a blog can be created', function() {
       cy.contains('create new blog').click()
       cy.get('#title-input').type('Test Engineering')
       cy.get('#author-input').type('Gerhard Berger')
@@ -52,31 +52,31 @@ describe('Blog app', function() {
       cy.contains('Test Engineering')
     })
 
-    it('A blog can be liked', function() {
+    it('a blog can be liked', function() {
       cy.createBlog({
         title: 'Test Engineering',
         author: 'Gerhard Berger',
         url: 'http://greatblogs.com/gberger/testing'
       })
 
-      cy.contains('view').click()
-      cy.contains('like').click()
+      cy.get('.view-button').click()
+      cy.get('.like-button').click()
       cy.contains('likes 1')
     })
 
-    it('A blog can be removed by the user who created the blog', function() {
+    it('a blog can be removed by the user who created the blog', function() {
       cy.createBlog({
         title: 'Test Engineering',
         author: 'Gerhard Berger',
         url: 'http://greatblogs.com/gberger/testing'
       })
 
-      cy.contains('view').click()
-      cy.contains('remove').click()
+      cy.get('.view-button').click()
+      cy.get('.remove-button').click()
       cy.get('html').should('not.contain', 'Test Engineering')
     })
 
-    it('A blog can not be removed by an user who did not create it', function() {
+    it('a blog can not be removed by an user who did not create it', function() {
       const newUser = {
         name: 'Matti Luukkainen',
         username: 'mluukkai',
@@ -93,8 +93,60 @@ describe('Blog app', function() {
       cy.get('#logout-button').click()
       cy.login({ username: 'mluukkai', password: 'salasana1' })
 
-      cy.contains('view').click()
-      cy.get('#remove-button').should('not.exist')
+      cy.get('.view-button').click()
+      cy.get('.remove-button').should('not.exist')
+    })
+  })
+
+  describe('When there are several blogs', function() {
+    beforeEach(function() {
+      cy.login({ username: 'toivane4', password: 'salainen' })
+      cy.createBlog({
+        title: 'Test Engineering',
+        author: 'Gerhard Berger',
+        url: 'http://greatblogs.com/gberger/testing'
+      })
+      cy.createBlog({
+        title: 'Mysteries of Cypress',
+        author: 'Alan Jones',
+        url: 'http://greatblogs.com/ajones/mystery'
+      })
+      cy.createBlog({
+        title: 'Holding Out for Hero',
+        author: 'Bonnie Tyler',
+        url: 'http://greatblogs.com/btyler/hero'
+      })
+    })
+
+    it('blogs are ordered by the amount of likes', function() {
+      cy.get('.blog').eq(0).should('contain.text', 'Test Engineering')
+      cy.get('.blog').eq(1).should('contain.text', 'Mysteries of Cypress')
+      cy.get('.blog').eq(2).should('contain.text', 'Holding Out for Hero')
+
+      cy.contains('Test Engineering').contains('view').click()
+      cy.get('.blog .moreInfo').eq(0).find('.like-button').click().wait(100).click().wait(100).click()
+      cy.contains('Mysteries of Cypress').contains('view').click()
+      cy
+        .get('.blog .moreInfo')
+        .eq(1)
+        .find('.like-button')
+        .click()
+        .wait(100)
+        .click()
+        .wait(100)
+        .click()
+        .wait(100)
+        .click()
+        .wait(100)
+        .click()
+        .wait(100)
+        .click()
+      cy.contains('Holding Out for Hero').contains('view').click()
+      cy.get('.blog .moreInfo').eq(2).find('.like-button').click().wait(100).click().wait(100).click().wait(100).click()
+
+      cy.get('.blog').eq(0).should('contain.text', 'Mysteries of Cypress')
+      cy.get('.blog').eq(1).should('contain.text', 'Holding Out for Hero')
+      cy.get('.blog').eq(2).should('contain.text', 'Test Engineering')
     })
   })
 })

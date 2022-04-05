@@ -19,21 +19,27 @@ const Blog = ({ blog, user, handleAddLike, handleRemoveBlog }) => {
     <div className="blog" style={blogStyle}>
       <div className="lessInfo" style={hideContent}>
         {blog.title} {blog.author}
-        <button onClick={() => setShowInfo(true)}>view</button>
+        <button className="view-button" onClick={() => setShowInfo(true)}>
+          view
+        </button>
       </div>
       <div className="moreInfo" style={showContent}>
         <div>
           {blog.title} {blog.author}
-          <button onClick={() => setShowInfo(false)}>hide</button>
+          <button className="hide-button" onClick={() => setShowInfo(false)}>
+            hide
+          </button>
         </div>
         <div>{blog.url}</div>
         <div>
           likes {blog.likes}
-          <button onClick={handleAddLike}>like</button>
+          <button className="like-button" onClick={handleAddLike}>
+            like
+          </button>
         </div>
         <div>{blog.user.name}</div>
         {user.username === blog.user.username && (
-          <button id="remove-button" onClick={handleRemoveBlog}>
+          <button className="remove-button" onClick={handleRemoveBlog}>
             remove
           </button>
         )}
